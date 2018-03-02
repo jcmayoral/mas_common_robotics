@@ -14,7 +14,7 @@
 #include <ctime>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/serialization/shared_ptr.hpp>
+//#include <boost/serialization/shared_ptr.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
@@ -996,7 +996,7 @@ void CRTPNeuralNetworkEnsemble::save(std::string filename)
 
     boost::archive::text_oarchive oa(ofs);
     // write class instance to archive
-    oa << this;
+    oa << *this;
     // archive and stream closed when destructors are called
 
 }

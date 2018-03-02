@@ -13,7 +13,7 @@
 #include <limits>
 #include <utility>
 #include <boost/shared_ptr.hpp>
-#include <boost/archive/shared_ptr_helper.hpp>
+#include <boost/serialization/shared_ptr_helper.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>

@@ -38,7 +38,7 @@ void CMds::init()
     std::cout << std::endl << "Values" << this->inputVectors.cols << " " << this->inputVectors.rows << std::endl;
     //  this->printOutMat(inputVectors, 0);
 
-    this->pcaComputer(this->inputVectors, this->avgVector, CV_PCA_DATA_AS_ROW, this->numDim);//CV_PCA_DATA_AS_COL ); //CV_PCA_DATA_AS_ROW);
+    this->pcaComputer(this->inputVectors, this->avgVector, CV_PCA_DATA_AS_ROW, (double)this->numDim);//CV_PCA_DATA_AS_COL ); //CV_PCA_DATA_AS_ROW);
 
     //      cv::Mat vect = this->getEigenVectors();
     //  std::cout << std::endl << "Values" << vect.rows << std::endl;

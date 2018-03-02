@@ -9,7 +9,6 @@
 *                                                          *
 ************************************************************/
 
-#include <opencv/cv.h>
 #include <vector>
 
 #include "open_surf/ipoint.h"
