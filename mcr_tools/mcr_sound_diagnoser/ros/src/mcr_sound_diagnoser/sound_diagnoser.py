@@ -9,21 +9,21 @@ import rospy
 class SoundDiagnoser:
     def __init__(self, config_file):
         rospy.init_node("sound_diagnoser", anonymous = False)
-        common_path = "/home/jose/ros/src/mas_common_robotics/mcr_tools/mcr_sound_diagnoser/ros/"
-        self.sound_dictionary = yaml.load(open(common_path + "config/" + config_file+".yaml"))
+        self.common_path = "/home/jose/ros/src/mas_common_robotics/mcr_tools/mcr_sound_diagnoser/ros/"
+        self.sound_dictionary = yaml.load(open(self.common_path + "config/" + config_file+".yaml"))
         self.CHUNK = 1024 #TODO
 
         self.audio_manager = pyaudio.PyAudio()
 
         for sound in self.sound_dictionary:
-            rospy.Subscriber(self.sound_dictionary[sound]['topic'], rospy.AnyMsg, self.mainCB)
-            sound_file = common_path + 'willow-sound/'+ self.sound_dictionary[sound]['folder']+'/'+ self.sound_dictionary[sound]['file_name'] 
-            self.playSound(sound_file)
+            sound_file = self.sound_dictionary[sound]['folder']+'/'+ self.sound_dictionary[sound]['file_name'] 
+            rospy.Subscriber(self.sound_dictionary[sound]['topic'], rospy.AnyMsg, self.mainCB, sound_file)
 
         rospy.spin()
 
-    def mainCB(self, msg):
-        print("Inside CB")
+    def mainCB(self, msg, sound_file):
+        sound_file_path = self.common_path + 'willow-sound/'+ sound_file 
+        self.playSound(sound_file_path)
 
     def playSound(self,sound_file):
         wf = wave.open(sound_file, 'rb')
