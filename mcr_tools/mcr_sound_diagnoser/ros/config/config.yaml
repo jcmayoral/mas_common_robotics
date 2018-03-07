@@ -1,6 +1,8 @@
 Hey1:
+  topic: /test
   folder: A
   file_name: AHey.wav
 Start:
+  topic: /test1
   folder: K
   file_name: KHmm.wav
