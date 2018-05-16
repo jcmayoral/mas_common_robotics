@@ -5,14 +5,21 @@ find_package(catkin REQUIRED
   COMPONENTS
     roslint
     std_msgs
+    dynamic_reconfigure
 )
 
 catkin_python_setup()
 
+generate_dynamic_reconfigure_options(
+   ros/cfg/soundDiagnoser.cfg
+)
+
 catkin_package(
   CATKIN_DEPENDS
     rospy
+    rospkg
     std_msgs
+    dynamic_reconfigure
 )
 
 ### TESTS
@@ -20,7 +27,6 @@ roslint_python()
 
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
-
   roslaunch_add_file_check(ros/launch)
 endif()
 
@@ -29,6 +35,6 @@ install(DIRECTORY ros/launch
 )
 
 install(PROGRAMS
-  ros/scripts/rosbag_recorder_node
+  ros/scripts/sound_diagnoser
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

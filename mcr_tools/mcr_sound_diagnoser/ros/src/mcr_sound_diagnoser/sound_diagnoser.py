@@ -5,25 +5,39 @@ import wave
 import sys
 import yaml
 import rospy
+import rospkg
+from dynamic_reconfigure.server import Server
+from mcr_sound_diagnoser.cfg import soundDiagnoserConfig
+
 
 class SoundDiagnoser:
     def __init__(self, config_file):
-        rospy.init_node("sound_diagnoser", anonymous = False)
-        self.common_path = "/home/jose/ros/src/mas_common_robotics/mcr_tools/mcr_sound_diagnoser/ros/"
-        self.sound_dictionary = yaml.load(open(self.common_path + "config/" + config_file+".yaml"))
+        package_name = "mcr_sound_diagnoser"
+        rospy.init_node(package_name + '_node', anonymous = False)
+
+        self.package_path = rospkg.RosPack().get_path(package_name) + '/'
+        sound_dictionary = yaml.load(open(self.package_path + "config/" + config_file+".yaml"))
         self.CHUNK = 1024 #TODO
 
+        self.is_enable = True
         self.audio_manager = pyaudio.PyAudio()
 
-        for sound in self.sound_dictionary:
-            sound_file = self.sound_dictionary[sound]['folder']+'/'+ self.sound_dictionary[sound]['file_name'] 
-            rospy.Subscriber(self.sound_dictionary[sound]['topic'], rospy.AnyMsg, self.mainCB, sound_file)
+        for sound in sound_dictionary:
+            sound_file = sound_dictionary[sound]['folder']+'/'+ sound_dictionary[sound]['file_name']
+            rospy.Subscriber(sound_dictionary[sound]['topic'], rospy.AnyMsg, self.mainCB, sound_file)
+
+        self.dyn_reconfigure_srv = Server(soundDiagnoserConfig, self.dynamic_reconfigureCB)
 
         rospy.spin()
 
+    def dynamic_reconfigureCB(self,config, level):
+        self.is_enable = config["allow_sound"]
+        return config
+
     def mainCB(self, msg, sound_file):
-        sound_file_path = self.common_path + 'willow-sound/'+ sound_file 
-        self.playSound(sound_file_path)
+        sound_file_path = self.package_path + 'willow-sound/'+ sound_file
+        if self.is_enable:
+            self.playSound(sound_file_path)
 
     def playSound(self,sound_file):
         wf = wave.open(sound_file, 'rb')
@@ -40,8 +54,3 @@ class SoundDiagnoser:
             # stop stream (4)
         stream.stop_stream()
         stream.close()
- 
-
-
-
-
